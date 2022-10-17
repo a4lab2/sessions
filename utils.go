@@ -1,6 +1,7 @@
 package session
 
 import (
+	"container/list"
 	"crypto/rand"
 	"encoding/base64"
 	"fmt"
@@ -13,6 +14,7 @@ import (
 )
 
 //Design inspired by database/sql/driver style
+//
 
 var provides = make(map[string]Provider)
 
@@ -44,7 +46,6 @@ var globalSessions *Manager
 
 func init() {
 	globalSessions = NewManager("memory", "gosessionid", 3600)
-
 }
 
 type Session interface {
@@ -153,3 +154,5 @@ func count(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html")
 	t.Execute(w, s.Get("countnum"))
 }
+
+var pder = &Provider{list: list.New()}
